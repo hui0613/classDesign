@@ -44,6 +44,7 @@ import API from "../API";
 export default {
   data() {
     return {
+      id: "1",
       username: "hui",
       password: "123",
       status: "0",
@@ -58,7 +59,17 @@ export default {
       this.disable = !this.disable;
     },
     saveModify() {
-      this.disable = !this.disable;
+      API.bakModifyUserInfo(
+        {
+          id: this.ud,
+          password: this.password,
+          status: this.status
+        },
+        data => {
+          this.disable = !this.disable;
+          console.log(data);
+        }
+      );
     }
   },
   created() {

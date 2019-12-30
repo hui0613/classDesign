@@ -37,5 +37,30 @@ export default {
   //获取用户的具体信息
   bakGetUserInfo(data, callback) {
     return postRequest('/getUserInfo', data, callback)
+  },
+
+  //修改用户信息
+  bakModifyUserInfo(data, callback) {
+    return postRequest('', data, callback)
+  },
+
+  //获取歌曲列表
+  bakGetMusicList(data, callback) {
+    return postRequest('', data, callback)
+  },
+
+  //获取歌曲详细信息
+  bakGetMusicInfo(data, callback) {
+    return postRequest('', data, callback)
+  },
+
+  //保存修改的歌词
+  bakSaveModifyLrc(data, callback) {
+    return postRequest('', data, callback)
+  },
+
+  //添加歌曲
+  bakAddMusic(data, callback) {
+    return postRequest('', data, callback)
   }
 }
