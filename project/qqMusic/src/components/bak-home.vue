@@ -1,6 +1,9 @@
 <template>
   <el-container class="box">
-    <el-header class="header">XXXX管理后台</el-header>
+    <el-header class="header">
+      XXXX管理后台
+      <span class="logout" @click="logout">退出</span>
+    </el-header>
     <el-container>
       <el-aside width="200px" class="aside">
         <el-col :span="24">
@@ -11,7 +14,7 @@
             router
           >
             <template v-for="(item,index) in this.$router.options.routes" v-if="!item.hidden">
-              <el-submenu :index="index+''" v-if="item.children.length>0" :key="index">
+              <el-submenu :index="index+''" v-if="item.children.length>1" :key="index">
                 <template slot="title">
                   <i :class="item.iconCls"></i>
                   <span>{{item.name}}</span>
@@ -42,16 +45,29 @@
 </template>
 
 <script>
+import API from "../API";
 export default {
   methods: {
     back() {
       this.$router.go(-1);
+    },
+    logout() {
+      API.bakLogout().then(Response => {
+        console.log(Response);
+        if (Response.data.message == "请求成功！") {
+          this.$router.push("/bak-login");
+        }
+      });
     }
   }
 };
 </script>
 
 <style scoped>
+.logout {
+  float: right;
+  cursor: pointer;
+}
 .box {
   height: 100vh;
 }

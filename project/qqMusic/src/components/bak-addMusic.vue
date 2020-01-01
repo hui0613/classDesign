@@ -1,31 +1,34 @@
 <template>
   <div class="bak-addMusic">
     <div class="bak-song-info">
-      <el-button type="primary" class="bak-add-button" @click="addMusic">添加歌曲</el-button>
-      <el-input placeholder="请输入歌名" v-model="songName" class="bak-input-list">
-        <template slot="prepend">歌名</template>
+      <!-- <el-button type="primary" class="bak-add-button" @click="addSinger">添加歌手</el-button> -->
+      <!-- <div class="avatar-img">
+
+      </div>-->
+
+      <!-- <el-input placeholder="请输入歌曲名" v-model="singerInfo.songName" class="bak-input-list">
+        <template slot="prepend">歌曲名</template>
       </el-input>
-      <el-input placeholder="请输入歌手" v-model="singerName" class="bak-input-list">
-        <template slot="prepend">歌手</template>
-      </el-input>
-      <el-input placeholder="请输入类型" v-model="songType" class="bak-input-list">
-        <template slot="prepend">类型</template>
-      </el-input>
-      <el-input type="file" v-model="songImg" class="bak-input-list">
-        <template slot="prepend">封面</template>
-      </el-input>
-      <el-input type="file" v-model="songSource" class="bak-input-list">
-        <template slot="prepend">音频</template>
-      </el-input>
-      <h2 class="bak-add-lrc">歌词</h2>
-      <el-input
-        type="textarea"
-        minRows="20"
-        autosize
-        placeholder="请输入歌词"
-        v-model="lrc"
-        class="textarea"
-      ></el-input>
+      <el-input placeholder="请输入歌手" v-model="singerInfo.singerName" class="bak-input-list">
+        <template slot="prepend">歌曲名</template>
+      </el-input>-->
+      <el-upload
+        class="upload-demo"
+        ref="upload"
+        action="http://192.168.43.216:8080/emptyspirit/song"
+        :data="songInfo"
+        :auto-upload="false"
+        :on-success="successUpload"
+      >
+        <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+        <el-button
+          style="margin-left: 10px;"
+          size="small"
+          type="success"
+          @click="submitUpload"
+        >上传到服务器</el-button>
+        <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+      </el-upload>
     </div>
   </div>
 </template>
@@ -35,29 +38,24 @@ import API from "../API";
 export default {
   data() {
     return {
-      songName: "",
-      singerName: "",
-      songType: "",
-      songImg: "",
-      songSource: "",
-      lrc: ``
+      songInfo: {
+        songName: "123",
+        singerId: "2",
+        songType: "2",
+        songWord: "12"
+      }
     };
   },
   methods: {
-    addMusic() {
-      API.bakAddMusic(
-        {
-          songName: this.songName,
-          singerName: this.singerName,
-          songType: this.songType,
-          songImg: this.songImg,
-          songSource: this.songSource,
-          lrc: this.lrc
-        },
-        data => {
-          console.log(data);
-        }
-      );
+    submitUpload() {
+      this.$refs.upload.submit();
+    },
+    successUpload(Response, file, filelist) {
+      // code: 1
+      // message: "添加歌手操作成功！"
+      console.log(Response);
+      console.log(file);
+      console.log(FileList);
     }
   }
 };

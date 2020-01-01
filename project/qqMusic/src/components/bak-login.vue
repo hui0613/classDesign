@@ -13,47 +13,59 @@
 </template>
 
 <script>
-import API from '../API'
+import API from "../API";
 export default {
-  data(){
-    return{
-      username:'',
-      password:'',
-      loginResult:''
-    }
+  data() {
+    return {
+      username: "",
+      password: "",
+      loginResult: ""
+    };
   },
-  methods:{
-    bakLogin(){
-      API.bakLogin({
-        usernmae: this.username,
-        password: this.password
-      },data=>{
-        console.log(data)
-      })
+  methods: {
+    bakLogin() {
+      if (this.username == "" || this.password == "") {
+        this.loginResult = "账号和密码不能为空";
+      } else {
+        API.bakLogin({
+          userName: this.username,
+          password: this.password
+        }).then(Response => {
+          console.log(Response);
+          if (Response.data.message == "登录成功") {
+            console.log("登录成功");
+            this.$router.push({
+              path: "/bak-home"
+            });
+          } else {
+            this.loginResult = "账号或密码错误";
+          }
+        });
+      }
     }
   }
-}
+};
 </script>
 
 <style scoped>
-.loginResult{
+.loginResult {
   height: 30px;
   line-height: 30px;
   text-align: center;
-  color: #F56C6C;
+  color: #f56c6c;
   /* border: 1px solid rsed; */
 }
 
-.bak-submit{
+.bak-submit {
   width: 100%;
   margin-top: 20px;
 }
 
-.input-list{
+.input-list {
   padding: 10px 0;
 }
 
-.loginTitle{
+.loginTitle {
   height: 40px;
   padding: 10px 0 0 0;
 }

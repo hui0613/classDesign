@@ -1,56 +1,71 @@
 <template>
   <div class="bak-music-box">
-    <div class="bak-header">
-      <div class="bak-img">
-        <img
-          src="https://y.gtimg.cn/music/photo_new/T002R300x300M000002zy82h3ntNjS.jpg?max_age=2592000"
-          alt
-        />
-      </div>
-      <div class="bak-music-info">
-        <p class="bak-title">一直在等 (《反恐行动之浪漫满屋》微电影</p>
-        <div class="bak-author">
-          <i class="el-icon-user bak-author-icon">本兮</i>
-        </div>
-        <br />
-        <div class="bak-typeAndTime">
-          <span>流派：Pop</span>
-          <span class="bak-time">发布时间：20158-20</span>
-        </div>
-      </div>
-    </div>
-    <div class="bak-musicInfoMain">
-      <h2 class="bak-lrc-title">歌词</h2>
-
-      <div class="bak-lrc-text">
-        <el-input
-          type="textarea"
-          autosize
-          placeholder="请输入内容"
-          :disabled="textareaDisable"
-          v-model="lrc"
-          class="textarea"
-        ></el-input>
-      </div>
-      <div class="bak-lrc-options">
-        <el-button size="mini" type="primary" v-if="textareaDisable" @click="modifyLrc">修改歌词</el-button>
-        <el-button size="mini" type="primary" v-if="!textareaDisable" @click="saveModifyLrc">保存歌词</el-button>
-      </div>
-      <h2 class="bak-lrc-title" style="margin-top:20px;">精彩评论</h2>
-      <div class="bak-music-comment">
-        <div class="bak-music-comment-list" v-for="(item,index) in commentArray" :key="index">
-          <div class="bak-user-avatar">
-            <img :src="item.avatar" alt />
+    <div
+      v-loading="loading"
+      element-loading-text="拼命加载中"
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(0, 0, 0, 0)"
+    >
+      <div v-if="!loading">
+        <div class="bak-header">
+          <div class="bak-img">
+            <img
+              src="https://y.gtimg.cn/music/photo_new/T002R300x300M000002zy82h3ntNjS.jpg?max_age=2592000"
+              alt
+            />
           </div>
-          <div class="bak-comment-info">
-            <p class="bak-comment-username">{{item.username}}</p>
-            <p class="bak-comment-content">{{item.content}}</p>
-            <div class="bak-comment-other-info">
-              <span class="bak-comment-publish-time">{{item.time}}</span>
+          <div class="bak-music-info">
+            <p class="bak-title">{{songInfo.songName}}</p>
+            <div class="bak-author">
+              <i class="el-icon-user bak-author-icon">{{songInfo.singerId}}</i>
+            </div>
+            <br />
+            <div class="bak-typeAndTime">
+              <span>流派：{{songInfo.songType}}</span>
+              <span class="bak-time">发布时间：20158-20</span>
             </div>
           </div>
-          <div class="bak-comment-option">
-            <el-button type="danger" size="mini">删除</el-button>
+        </div>
+        <div class="bak-musicInfoMain">
+          <h2 class="bak-lrc-title">歌词</h2>
+
+          <div class="bak-lrc-text">
+            <el-input
+              type="textarea"
+              autosize
+              resize="none"
+              placeholder="暂无歌词"
+              :disabled="textareaDisable"
+              v-model="songInfo.songWord"
+              class="textarea"
+            ></el-input>
+          </div>
+          <div class="bak-lrc-options">
+            <el-button size="mini" type="primary" v-if="textareaDisable" @click="modifyLrc">修改歌词</el-button>
+            <el-button
+              size="mini"
+              type="primary"
+              v-if="!textareaDisable"
+              @click="saveModifyLrc"
+            >保存歌词</el-button>
+          </div>
+          <h2 class="bak-lrc-title" style="margin-top:20px;">精彩评论</h2>
+          <div class="bak-music-comment">
+            <div class="bak-music-comment-list" v-for="(item,index) in commentArray" :key="index">
+              <div class="bak-user-avatar">
+                <img :src="item.avatar" alt />
+              </div>
+              <div class="bak-comment-info">
+                <p class="bak-comment-username">{{item.userId}}</p>
+                <p class="bak-comment-content">{{item.content}}</p>
+                <div class="bak-comment-other-info">
+                  <span class="bak-comment-publish-time">{{item.createTime}}</span>
+                </div>
+              </div>
+              <div class="bak-comment-option">
+                <el-button type="danger" size="mini" @click="deleteThisComment(item)">删除</el-button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -64,105 +79,8 @@ export default {
   data() {
     return {
       textareaDisable: true,
-      lrc: `一直在等 (《反恐行动之浪漫满屋》微电影片尾曲) - 本兮
-
-词：本兮
-
-曲：本兮
-
-就像是太阳围绕你
-
-像月亮陪伴你作星星守护你我
-
-想要一伸手就能拥抱到你
-
-一天看不见会着急
-
-寄出心里的信目的地是你的心
-
-想想你的微笑会有多欣喜
-
-一直都在等你
-
-一直都在等你并肩前行
-
-一直都在等你
-
-一直都在等你 wo oh
-
-一直都在等你
-
-一直都在等你不是秘密
-
-一直都在等你
-
-一直都在等你
-
-难道看不出吗
-
-还是和我一样都在装傻
-
-说不出的心里话 oh
-
-如果这只是我一个人的秘密
-
-我会吞下你会让他发生吗
-
-就像是太阳围绕你
-
-像月亮陪伴你
-
-作星星守护你我
-
-想要一伸手就能拥抱到你
-
-一天看不见会着急
-
-寄出心里的信目的地是你的心
-
-想想你的微笑会有多欣喜
-
-一直都在等你一直都在等你
-
-并肩前行
-
-一直都在等你一直都在等你
-
-Wo oh
-
-一直都在等你一直都在等你
-
-不是秘密
-
-一直都在等你一直都在等你
-
-难道看不出吗
-
-还是和我一样都在装傻
-
-说不出的心里话 oh
-
-如果这只是我一个人的秘密
-
-我会吞下你会让他发生吗
-
-一直都在等一直都在等你 wo oh
-
-一直都在等一直都在等你 oh
-
-一直都在等一直都在等你
-
-一直都在等一直都在等你
-
-难道看不出吗
-
-还是和我一样都在装傻
-
-说不出的心里话 oh
-
-如果这只是我一个人的秘密
-
-我会吞下你会让他发生吗`,
+      songInfo: [],
+      loading: false,
       commentArray: [
         {
           id: "",
@@ -195,29 +113,39 @@ Wo oh
     };
   },
   created() {
-    API.bakGetMusicInfo(
-      {
-        id: this.$route.query.id
-      },
-      data => {
-        console.log(data);
-      }
-    );
+    API.bakGetMusicInfo(this.$route.query.id).then(Response => {
+      console.log(Response);
+      this.songInfo = Response.data.data;
+    });
+    API.bakGetComment({
+      songId: this.$route.query.id
+    }).then(Response => {
+      this.commentArray = Response.data.data;
+      console.log(Response);
+    });
   },
   methods: {
     modifyLrc() {
       this.textareaDisable = !this.textareaDisable;
     },
     saveModifyLrc() {
-      API.bakSaveModifyLrc(
-        {
-          lrc: this.lrc
-        },
-        data => {
-          console.log(data);
-        }
-      );
+      API.bakSaveModifyLrc({
+        id: this.songInfo.id,
+        songWord: this.songInfo.songWord
+      }).then(Response => {
+        // code: 1
+        // message: "评论删除成功!"
+        console.log(Response);
+      });
       this.textareaDisable = !this.textareaDisable;
+    },
+    deleteThisComment(item) {
+      console.log(item);
+      API.bakDeleteComment({
+        id: item.id
+      }).then(Response => {
+        console.log(Response);
+      });
     }
   }
 };
