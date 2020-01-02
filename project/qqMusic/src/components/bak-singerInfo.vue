@@ -2,18 +2,10 @@
   <div class="bak-music-box">
     <div class="bak-header">
       <div class="bak-img">
-        <img :src="'http://192.168.43.216:8080/emptyspirit'+singerInfo.avatar" alt />
+        <img :src="'http://192.168.43.105:8080/emptyspirit'+singerInfo.avatar" alt />
       </div>
       <div class="bak-music-info">
         <p class="bak-title">{{singerInfo.singerName}}</p>
-        <!-- <div class="bak-author">
-          <i class="el-icon-user bak-author-icon">{{songInfo.singerId}}</i>
-        </div>
-        <br />
-        <div class="bak-typeAndTime">
-          <span>流派：{{songInfo.songType}}</span>
-          <span class="bak-time">发布时间：20158-20</span>
-        </div>-->
         <div class="singerInfo">
           <el-input
             type="textarea"
@@ -27,11 +19,10 @@
       </div>
     </div>
     <div class="options">
-      <el-button type="primary" @click="saveModify" v-if="!singerInfoDisable">保存歌手信息</el-button>
-      <el-button type="primary" @click="modifySingerInfo" v-if="singerInfoDisable">修改歌手信息</el-button>
+      <el-button type="primary" @click="modifySingerInfo">修改歌手信息</el-button>
       <el-button type="danger" @click="deleteSinger">删除歌手</el-button>
     </div>
-    <div class="bak-hotSong">
+    <!-- <div class="bak-hotSong">
       <h2 class="bak-hotSong-title">热门歌曲</h2>
       <el-table :data="hotSongs" style="width: 100%">
         <el-table-column prop="songName" label="歌名" width="180"></el-table-column>
@@ -43,7 +34,7 @@
           </template>
         </el-table-column>
       </el-table>
-    </div>
+    </div>-->
   </div>
 </template>
 
@@ -59,6 +50,7 @@ export default {
     };
   },
   created() {
+    console.log(this.$route.query.id);
     API.bakGetSingerInfo(this.$route.query.id).then(Response => {
       console.log(Response);
       this.singerInfo = Response.data.data;
@@ -66,7 +58,12 @@ export default {
   },
   methods: {
     modifySingerInfo() {
-      this.singerInfoDisable = false;
+      this.$router.push({
+        path: "/modifySingerInfo",
+        query: {
+          id: this.$route.query.id
+        }
+      });
     },
     saveModify() {
       this.$router.push({
@@ -84,6 +81,7 @@ export default {
         // code: 1
         // message: "删除成功！"
         console.log(Response);
+        this.$router.go(-1);
       });
     },
     handleEdit(index, row) {

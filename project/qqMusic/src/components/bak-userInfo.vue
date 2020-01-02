@@ -7,13 +7,10 @@
     element-loading-background="rgba(0, 0, 0, 0)"
   >
     <div v-if="!loading">
-      <h2 class="bak-userInfoTitle">XXX用户的信息</h2>
+      <h2 class="bak-userInfoTitle">{{user.userName}}用户的信息</h2>
       <div class="user-info">
         <div class="block">
-          <el-avatar
-            :size="80"
-            src="http://img1.imgtn.bdimg.com/it/u=178224941,13016582&fm=26&gp=0.jpg"
-          ></el-avatar>
+          <el-avatar :size="80" :src="host+user.avatar"></el-avatar>
         </div>
         <div class="user-info-list">
           <el-input placeholder="请输入账号" v-model="user.userName" class="input-list" :disabled="true">
@@ -69,16 +66,18 @@
 
 <script>
 import API from "../API";
+import config from "../bak-config";
 export default {
   data() {
     return {
+      host: config.host,
       id: "1",
       username: "hui",
-      password: "123",
+      password: "12334",
       status: "0",
       role: "0",
       disable: true,
-      rePassword: "123",
+      rePassword: "",
       user: [],
       loading: true
     };
@@ -89,18 +88,26 @@ export default {
       this.disable = !this.disable;
     },
     saveModify() {
-      API.bakModifyUserInfo({
-        id: this.user.id,
-        password: this.rePassword
-      }).then(Response => {
-        console.log(Response);
-        if (Response.data.data.message == "更新成功") {
-          this.$message({
-            type: "success",
-            message: "已更新" + this.user.userName + "用户的信息"
-          });
-        }
-      });
+      if (this.user.password == this.rePassword) {
+        API.bakModifyUserInfo({
+          id: this.user.id,
+          password: this.rePassword
+        }).then(Response => {
+          console.log(Response);
+          if (Response.data.message == "更新成功") {
+            this.$message({
+              type: "success",
+              message: "已更新" + this.user.userName + "用户的信息"
+            });
+            this.disable = !this.disable;
+          }
+        });
+      } else {
+        this.$message({
+          type: "error",
+          message: "两次密码不一致"
+        });
+      }
     }
   },
   created() {
@@ -125,12 +132,12 @@ export default {
 .user-info {
   margin-top: 30px;
   padding: 10px 10px;
-  border: 1px solid red;
+  /* border: 1px solid red; */
 }
 .bak-user-info {
   width: 600px;
   margin: 0 auto;
   padding: 30px 0 0 0;
-  border: 1px solid red;
+  /* border: 1px solid red; */
 }
 </style>

@@ -1,14 +1,16 @@
 <template>
-  <div class="bak-login-box">
-    <h2 class="loginTitle">XXX后台登录</h2>
-    <p class="loginResult">{{loginResult}}</p>
-    <el-input placeholder="请输入账号" v-model="username" class="input-list">
-      <template slot="prepend">账号</template>
-    </el-input>
-    <el-input placeholder="请输入密码" v-model="password" class="input-list">
-      <template slot="prepend">密码</template>
-    </el-input>
-    <el-button type="primary" class="bak-submit" @click="bakLogin">登录</el-button>
+  <div class="main">
+    <div class="bak-login-box">
+      <h2 class="loginTitle">空灵音乐后台登录</h2>
+      <p class="loginResult">{{loginResult}}</p>
+      <el-input placeholder="请输入账号" v-model="username" class="input-list">
+        <template slot="prepend">账号</template>
+      </el-input>
+      <el-input placeholder="请输入密码" v-model="password" type="password" class="input-list">
+        <template slot="prepend">密码</template>
+      </el-input>
+      <el-button type="primary" class="bak-submit" @click="bakLogin">登录</el-button>
+    </div>
   </div>
 </template>
 
@@ -82,5 +84,14 @@ export default {
   box-shadow: 5px 5px 5px #adadad;
   border-radius: 5px;
   border: 1px solid #cccccc;
+  background-color: #ffffff;
+}
+
+.main {
+  width: 100%;
+  height: 100vh;
+  background-image: url("../assets/bg.jpeg");
+  background-size: 100%;
+  background-repeat: no-repeat;
 }
 </style>

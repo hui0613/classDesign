@@ -1,6 +1,6 @@
 import Axios from 'axios'
 
-const host = 'http://192.168.43.216:8080/emptyspirit'
+const host = 'http://192.168.43.105:8080/emptyspirit'
 
 // const getRequest = function (url, data, callback) {
 //   Axios({
@@ -87,10 +87,10 @@ export default {
   },
 
   //获取歌曲详细信息
-  bakGetMusicInfo(data) {
+  bakGetMusicInfo(params) {
     return Axios({
-      method: 'post',
-      url: host + '/song/' + data
+      method: 'get',
+      url: host + '/song/' + params
     })
   },
 
@@ -122,8 +122,12 @@ export default {
   },
 
   //添加歌曲
-  bakAddMusic(data, callback) {
-    return postRequest('', data, callback)
+  bakAddMusic(params) {
+    return Axios.post(host + '/song', params, {
+      headers: {
+        "Content-Type": "multipart/form-data"
+      }
+    })
   },
 
   //删除歌曲
@@ -163,19 +167,19 @@ export default {
 
   //添加歌手
   bakAddSinger(params) {
-    return Axios({
-      method: 'post',
-      params,
-      url: host + '/singer'
+    return Axios.post(host + '/singer', params, {
+      headers: {
+        "Content-Type": "multipart/form-data"
+      }
     })
   },
 
   //修改歌手信息
   bakModifySinger(params) {
-    return Axios({
-      method: 'put',
-      params,
-      url: host + '/singer'
+    return Axios.put(host + '/singer', params, {
+      headers: {
+        "Content-Type": "multipart/form-data"
+      }
     })
   },
 
@@ -196,15 +200,51 @@ export default {
     })
   },
 
-  //创建歌单
-  bakAddSongList(params) {
+  //删除歌单中的歌曲
+  bakDeleteSongListMusic(params) {
     return Axios({
-      method: 'get',
+      method: 'delete',
       params,
-      url: host + url
+      url: host + '/songlist_song'
     })
   },
 
+  //往歌单中添加歌曲
+  bakAddSongToSongList(params) {
+    return Axios({
+      method: 'post',
+      params,
+      url: host + '/songlist_song'
+    })
+  },
+
+  //获取歌单中的歌曲
+  bakGetSongListSongs(params) {
+    return Axios({
+      method: 'get',
+      url: host + '/songlist_song/' + params
+    })
+  },
+
+  //创建歌单
+  bakAddSongList(params) {
+    return Axios({
+      method: 'post',
+      params,
+      url: host + '/songlist'
+    })
+  },
+
+  //删除歌单
+  bakDeleteSongList(params) {
+    return Axios({
+      method: 'delete',
+      params,
+      url: host + '/songlist'
+    })
+  },
+
+  //退出
   bakLogout() {
     return Axios({
       method: 'get',
@@ -217,7 +257,7 @@ export default {
     return Axios({
       method: 'get',
       params,
-      url: host + '/songtype'
+      url: host + '/type'
     })
   },
 
@@ -226,16 +266,16 @@ export default {
     return Axios({
       method: 'delete',
       params,
-      url: host + 'songtype'
+      url: host + '/type'
     })
   },
 
   //增加歌曲类型
   bakAddSongType(params) {
     return Axios({
-      method: 'get',
+      method: 'post',
       params,
-      url: host + 'songtype'
+      url: host + '/type'
     })
   }
 }

@@ -2,15 +2,14 @@
   <div>
     <div class="bak-header">
       <div class="bak-img">
-        <img
-          src="https://y.gtimg.cn/music/photo_new/T002R300x300M000002zy82h3ntNjS.jpg?max_age=2592000"
-          alt
-        />
+        <img :src="host + songlistInfo.imageUrl" alt />
       </div>
       <div class="bak-music-info">
         <p class="bak-title">{{songlistInfo.songlistName}}</p>
         <div class="bak-author">
-          <i class="el-icon-user bak-author-icon">123</i>
+          <i class="el-icon-user bak-author-icon">
+            <span style="color:#ec6c6c">admin</span>
+          </i>
         </div>
         <br />
         <div class="bak-typeAndTime">
@@ -29,28 +28,63 @@
         </div>
       </div>
     </div>
-    <el-button type="primary" style="float:left">添加歌曲</el-button>
-    <el-table :data="tableData" style="width: 100%">
+    <el-button type="primary" style="float:left" @click="showDrawer">添加歌曲</el-button>
+    <el-table :data="songListSongs" style="width: 100%">
       <el-table-column label="歌曲" prop="songName"></el-table-column>
       <el-table-column label="歌手" prop="singerName"></el-table-column>
       <!-- <el-table-column label="Role" prop="role"></el-table-column> -->
       <el-table-column align="right">
         <template slot-scope="scope">
-          <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">查看</el-button>
-          <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+          <el-button size="mini" @click="musicInfo(scope.$index, scope.row)">查看</el-button>
+          <el-button
+            size="mini"
+            type="danger"
+            @click="deleteMusicInSongList(scope.$index, scope.row)"
+          >删除</el-button>
         </template>
       </el-table-column>
     </el-table>
+    <div>
+      <el-drawer title=" " :visible.sync="drawer" direction="rtl">
+        <el-table :data="musidList" style="width: 100%">
+          <el-table-column label="歌曲" prop="songName"></el-table-column>
+          <el-table-column align="right">
+            <template slot="header" slot-scope="scope">
+              <el-input placeholder="请输入内容" v-model="searchKey" class="input-with-select">
+                <el-button slot="append" icon="el-icon-search"></el-button>
+              </el-input>
+            </template>
+            <template slot-scope="scope">
+              <el-button size="mini" @click="addToSongList(scope.$index, scope.row)">添加</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <el-pagination
+          background
+          layout="prev, pager, next"
+          :page-size="10"
+          :total="40"
+          @current-change="getMore"
+        ></el-pagination>
+      </el-drawer>
+    </div>
   </div>
 </template>
 
 <script>
 import API from "../API";
+import config from "../bak-config";
 export default {
   data() {
     return {
+      host: config.host,
+      drawer: false, //抽屉控制
+      musidList: [], //抽屉中歌曲列表
+      searchKey: "", //抽屉中搜索关键字
       songlistInfo: {},
-      tableData: [
+      songListInfoDisable: true,
+      songListSongs: [
+        //歌单中的歌曲
         {
           id: "1",
           songName: "123",
@@ -61,7 +95,7 @@ export default {
   },
   methods: {
     //查看歌曲具体信息
-    handleEdit(index, row) {
+    musicInfo(index, row) {
       console.log(index, row);
       this.$router.push({
         path: "/bak-musicInfo",
@@ -71,14 +105,71 @@ export default {
       });
     },
     //从该歌单中删除该歌曲
-    handleDelete(index, row) {
+    deleteMusicInSongList(index, row) {
       console.log(index, row);
+      API.bakDeleteSongListMusic({
+        id: row.songlistSong_id
+      }).then(Response => {
+        console.log(Response);
+        if (Response.data.message == "删除歌单中的歌成功！") {
+          this.$message({
+            type: "success",
+            message: "删除歌单中的歌成功！"
+          });
+          this.songListSongs.splice(index, 1);
+        }
+      });
+    },
+    //打开抽屉
+    showDrawer() {
+      this.drawer = true;
+      API.bakGetMusicList().then(Response => {
+        console.log(Response);
+        this.musidList = Response.data.data.list;
+      });
+    },
+    //分页获取更多
+    getMore(current) {
+      console.log(current);
+      API.bakGetMusicList({
+        page: current,
+        size: 10,
+        songName: ""
+      }).then(Response => {
+        console.log(Response);
+        this.loading = false;
+        this.musidList = Response.data.data.list;
+      });
+    },
+    //往歌单中添加歌曲
+    addToSongList(index, row) {
+      console.log(row);
+      API.bakAddSongToSongList({
+        songId: row.id,
+        songlistId: this.$route.query.id
+      }).then(Response => {
+        console.log(Response);
+        if (Response.data.message == "添加到歌单成功") {
+          this.$message({
+            type: "success",
+            message: "添加到歌单成功"
+          });
+          API.bakGetSongListSongs(this.$route.query.id).then(Response => {
+            console.log(Response);
+            this.songListSongs = Response.data.data[0].songList;
+          });
+        }
+      });
     }
   },
   created() {
     API.bakGEtSongListInfo(this.$route.query.id).then(Response => {
       console.log(Response);
       this.songlistInfo = Response.data.data;
+    });
+    API.bakGetSongListSongs(this.$route.query.id).then(Response => {
+      console.log(Response);
+      this.songListSongs = Response.data.data[0].songList;
     });
   }
 };

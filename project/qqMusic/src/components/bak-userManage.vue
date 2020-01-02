@@ -31,7 +31,7 @@ export default {
     return {
       tableData: [],
       search: "",
-      loading: false,
+      loading: true,
       forbidden: ""
     };
   },
@@ -87,6 +87,13 @@ export default {
             // message: "更新成功"
             console.log(Response);
             if (Response.data.message == "更新成功") {
+              if (row.userStatus == 0) {
+                row.status = "被封禁";
+                row.userStatus = 1;
+              } else {
+                row.status = "正常";
+                row.userStatus = 0;
+              }
               this.$message({
                 type: "success",
                 message: resultTip

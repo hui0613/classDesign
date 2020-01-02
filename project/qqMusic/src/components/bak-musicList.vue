@@ -30,6 +30,13 @@
           </template>
         </el-table-column>
       </el-table>
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        :page-size="10"
+        :total="50"
+        @current-change="getMore"
+      ></el-pagination>
     </div>
   </div>
 </template>
@@ -93,12 +100,24 @@ export default {
         console.log(this.tableData);
         this.searchLoading = false;
       });
+    },
+    getMore(current) {
+      console.log(current);
+      API.bakGetMusicList({
+        page: current,
+        size: 5,
+        songName: ""
+      }).then(Response => {
+        console.log(Response);
+        this.loading = false;
+        this.tableData = Response.data.data.list;
+      });
     }
   },
   created() {
     API.bakGetMusicList({
       page: 1,
-      size: 5,
+      size: 10,
       songName: ""
     }).then(Response => {
       console.log(Response);

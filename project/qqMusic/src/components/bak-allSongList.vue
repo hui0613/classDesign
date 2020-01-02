@@ -50,16 +50,11 @@ export default {
         }
       });
     },
-    //封禁用户
+    //删除歌单
     handleDelete(index, row) {
       console.log(index, row);
-      API.bakProhibitUser({
-        id: row.id,
-        avatar: "",
-        password: "",
-        userName: "",
-        userType: "",
-        userStatus: 1
+      API.bakDeleteSongList({
+        id: row.id
       }).then(Response => {
         // code: 1
         // message: "更新成功"
@@ -70,7 +65,7 @@ export default {
   created() {
     API.bakGetSongList({
       page: 1,
-      size: 5,
+      size: 10,
       songlistName: this.search
     }).then(Response => {
       console.log(Response);

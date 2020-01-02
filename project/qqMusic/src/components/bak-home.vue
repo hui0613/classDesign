@@ -1,7 +1,7 @@
 <template>
   <el-container class="box">
     <el-header class="header">
-      XXXX管理后台
+      空灵音乐管理后台
       <span class="logout" @click="logout">退出</span>
     </el-header>
     <el-container>
@@ -37,7 +37,8 @@
         </el-col>
       </el-aside>
       <el-main class="main">
-        <el-page-header v-if="$route.path != '/'" @back="back" :content="$route.name"></el-page-header>
+        <div v-if="$route.path == '/bak-home'" class="welcome">欢迎使用空灵音乐管理后台</div>
+        <el-page-header v-if="$route.path != '/bak-home'" @back="back" :content="$route.name"></el-page-header>
         <router-view></router-view>
       </el-main>
     </el-container>
@@ -64,6 +65,12 @@ export default {
 </script>
 
 <style scoped>
+.welcome {
+  height: 100px;
+  font-size: 30px;
+  line-height: 100px;
+  /* border: 1px solid red; */
+}
 .logout {
   float: right;
   cursor: pointer;
@@ -72,20 +79,20 @@ export default {
   height: 100vh;
 }
 .header {
-  border: 1px solid red;
+  /* border: 1px solid red; */
   color: #ffffff;
   height: 60px;
   line-height: 60px;
   background-color: #409eff;
 }
 .aside {
-  border: 1px solid red;
+  /* border: 1px solid #999; */
 }
 .main {
-  border: 1px solid red;
+  /* border: 1px solid red; */
 }
 .page-header {
   height: 30px;
-  border: 1px solid red;
+  /* border: 1px solid red; */
 }
 </style>

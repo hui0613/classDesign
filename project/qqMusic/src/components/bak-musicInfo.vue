@@ -9,10 +9,7 @@
       <div v-if="!loading">
         <div class="bak-header">
           <div class="bak-img">
-            <img
-              src="https://y.gtimg.cn/music/photo_new/T002R300x300M000002zy82h3ntNjS.jpg?max_age=2592000"
-              alt
-            />
+            <img :src="host + songInfo.songPhoto" alt />
           </div>
           <div class="bak-music-info">
             <p class="bak-title">{{songInfo.songName}}</p>
@@ -22,7 +19,7 @@
             <br />
             <div class="bak-typeAndTime">
               <span>流派：{{songInfo.songType}}</span>
-              <span class="bak-time">发布时间：20158-20</span>
+              <span class="bak-time">发布时间：2015-8-20</span>
             </div>
           </div>
         </div>
@@ -75,41 +72,15 @@
 
 <script>
 import API from "../API";
+import config from "../bak-config";
 export default {
   data() {
     return {
       textareaDisable: true,
       songInfo: [],
       loading: false,
-      commentArray: [
-        {
-          id: "",
-          avatar:
-            "https://thirdqq.qlogo.cn/g?b=sdk&k=cOoa1IkmicxUA5h9uklC6FQ&s=140&t=1557388477",
-          username: "hui",
-          content:
-            "这首歌，是我心中无法用言语来形容的一首歌，这首歌好像写得如此的优秀这首歌，是我心中无法用言语来形容的一首歌，这首歌好像写得如此的优秀这首歌，是我心中无法用言语来形容的一首歌，这首歌好像写得如此的优秀这首歌，是我心中无法用言语来形容的一首歌，这首歌好像写得如此的优秀这首歌，是我心中无法用言语来形容的一首歌，这首歌好像写得如此的优秀这首歌，是我心中无法用言语来形容的一首歌，这首歌好像写得如此的优秀这首歌，是我心中无法用言语来形容的一首歌，这首歌好像写得如此的优秀这首歌，是我心中无法用言语来形容的一首歌，这首歌好像写得如此的优秀这首歌，是我心中无法用言语来形容的一首歌，这首歌好像写得如此的优秀这首歌，是我心中无法用言语来形容的一首歌，这首歌好像写得如此的优秀这首歌，是我心中无法用言语来形容的一首歌，这首歌好像写得如此的优秀这首歌，是我心中无法用言语来形容的一首歌，这首歌好像写得如此的优秀",
-          time: "2016年4月15日 19:38"
-        },
-        {
-          id: "",
-          avatar:
-            "https://thirdqq.qlogo.cn/g?b=sdk&k=cOoa1IkmicxUA5h9uklC6FQ&s=140&t=1557388477",
-          username: "hui",
-          content:
-            "这首歌，是我心中无法用言语来形容的一首歌，这首歌好像写得如此的优秀",
-          time: "2016年4月15日 19:38"
-        },
-        {
-          id: "",
-          avatar:
-            "https://thirdqq.qlogo.cn/g?b=sdk&k=cOoa1IkmicxUA5h9uklC6FQ&s=140&t=1557388477",
-          username: "hui",
-          content:
-            "这首歌，是我心中无法用言语来形容的一首歌，这首歌好像写得如此的优秀",
-          time: "2016年4月15日 19:38"
-        }
-      ]
+      commentArray: [],
+      host: config.host
     };
   },
   created() {
