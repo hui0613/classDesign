@@ -34,7 +34,7 @@
         background
         layout="prev, pager, next"
         :page-size="10"
-        :total="50"
+        :total="30"
         @current-change="getMore"
       ></el-pagination>
     </div>
@@ -48,7 +48,7 @@ export default {
     return {
       tableData: [],
       search: "",
-      loading: true,
+      loading: false,
       searchLoading: false
     };
   },
@@ -105,7 +105,7 @@ export default {
       console.log(current);
       API.bakGetMusicList({
         page: current,
-        size: 5,
+        size: 10,
         songName: ""
       }).then(Response => {
         console.log(Response);
@@ -115,6 +115,7 @@ export default {
     }
   },
   created() {
+    this.loading = true;
     API.bakGetMusicList({
       page: 1,
       size: 10,

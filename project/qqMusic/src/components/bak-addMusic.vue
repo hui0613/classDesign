@@ -1,6 +1,12 @@
 <template>
-  <div>
-    <div class="box">
+  <div
+    class="box"
+    v-loading="loading"
+    element-loading-text="拼命加载中"
+    element-loading-spinner="el-icon-loading"
+    element-loading-background="rgba(0, 0, 0, 0)"
+  >
+    <div>
       <el-form :model="form" label-width="80px">
         <el-form-item label="歌曲名字" class="form-item">
           <el-input v-model="form.songName" placeholder="请输入歌曲名字"></el-input>
@@ -45,7 +51,7 @@
         <el-form-item label="歌曲音频" class="form-item">
           <el-upload
             class="upload-demo"
-            action="https://jsonplaceholder.typicode.com/posts/"
+            action=" "
             multiple
             :limit="1"
             :auto-upload="false"
@@ -90,11 +96,13 @@ export default {
         file_music: ""
       },
       singerList: [],
-      songTypeList: []
+      songTypeList: [],
+      loading: false
     };
   },
   methods: {
     addSong() {
+      this.loading = true;
       var formData = new FormData();
       formData.append("file_photo", this.form.file_photo);
       formData.append("file_music", this.form.file_music);
@@ -103,6 +111,7 @@ export default {
       formData.append("songWord", this.form.songWord);
       formData.append("songType", this.form.songType);
       API.bakAddMusic(formData).then(data => {
+        this.loading = false;
         console.log(data);
         if (data.data.code == 1) {
           this.$message({
@@ -112,7 +121,7 @@ export default {
         } else {
           this.$message({
             type: "error",
-            message: "添加成功"
+            message: "添加失败"
           });
         }
       });

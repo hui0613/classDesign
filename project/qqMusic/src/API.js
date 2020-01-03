@@ -1,6 +1,7 @@
 import Axios from 'axios'
+import config from './bak-config'
 
-const host = 'http://192.168.43.105:8080/emptyspirit'
+const host = config.host
 
 // const getRequest = function (url, data, callback) {
 //   Axios({

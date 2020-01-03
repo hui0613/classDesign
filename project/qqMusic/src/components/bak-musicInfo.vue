@@ -91,6 +91,9 @@ export default {
     API.bakGetComment({
       songId: this.$route.query.id
     }).then(Response => {
+      Response.data.data.forEach(element => {
+        element.createTime = this.formatDateTime(element.createTime);
+      });
       this.commentArray = Response.data.data;
       console.log(Response);
     });
@@ -117,6 +120,20 @@ export default {
       }).then(Response => {
         console.log(Response);
       });
+    },
+    formatDateTime(date) {
+      var time = new Date(Date.parse(date));
+      time.setTime(time.setHours(time.getHours() + 8));
+      var Y = time.getFullYear() + "-";
+      var M = this.addZero(time.getMonth() + 1) + "-";
+      var D = this.addZero(time.getDate()) + " ";
+      var h = this.addZero(time.getHours()) + ":";
+      var m = this.addZero(time.getMinutes()) + ":";
+      var s = this.addZero(time.getSeconds());
+      return Y + M + D + h + m + s;
+    },
+    addZero(num) {
+      return num < 10 ? "0" + num : num;
     }
   }
 };

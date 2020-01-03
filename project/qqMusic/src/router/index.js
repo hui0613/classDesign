@@ -20,12 +20,12 @@ Vue.use(Router)
 
 export default new Router({
   routes: [{
-      path: '/bak-login',
+      path: '/bak/login',
       name: 'bak-login',
       component: bakLogin,
       hidden: true
     }, {
-      path: '/bak-home',
+      path: '/bak/home',
       name: '用户管理',
       component: bakHome,
       hidden: false,
@@ -42,7 +42,7 @@ export default new Router({
       }],
     },
     {
-      path: '/bak-home',
+      path: '/bak/home',
       name: '音乐管理',
       component: bakHome,
       children: [{
@@ -72,7 +72,7 @@ export default new Router({
       ]
     },
     {
-      path: '/bak-home',
+      path: '/bak/home',
       name: '歌手管理',
       component: bakHome,
       hidden: false,
@@ -102,7 +102,7 @@ export default new Router({
       ]
     },
     {
-      path: '/bak-home',
+      path: '/bak/home',
       name: '歌单管理',
       component: bakHome,
       hidden: false,

@@ -1,5 +1,10 @@
 <template>
-  <div>
+  <div
+    v-loading="loading"
+    element-loading-text="拼命加载中"
+    element-loading-spinner="el-icon-loading"
+    element-loading-background="rgba(0, 0, 0, 0)"
+  >
     <div class="bak-header">
       <div class="bak-img">
         <img :src="host + songlistInfo.imageUrl" alt />
@@ -90,7 +95,8 @@ export default {
           songName: "123",
           singerName: "321"
         }
-      ]
+      ],
+      loading: false
     };
   },
   methods: {
@@ -106,17 +112,24 @@ export default {
     },
     //从该歌单中删除该歌曲
     deleteMusicInSongList(index, row) {
+      this.loading = true;
       console.log(index, row);
       API.bakDeleteSongListMusic({
         id: row.songlistSong_id
       }).then(Response => {
         console.log(Response);
         if (Response.data.message == "删除歌单中的歌成功！") {
+          this.loading = false;
           this.$message({
             type: "success",
             message: "删除歌单中的歌成功！"
           });
           this.songListSongs.splice(index, 1);
+        } else {
+          this.$message({
+            type: "error",
+            message: "删除歌单中的歌失败！"
+          });
         }
       });
     },
@@ -144,10 +157,12 @@ export default {
     //往歌单中添加歌曲
     addToSongList(index, row) {
       console.log(row);
+      this.loading = true;
       API.bakAddSongToSongList({
         songId: row.id,
         songlistId: this.$route.query.id
       }).then(Response => {
+        this.loading = false;
         console.log(Response);
         if (Response.data.message == "添加到歌单成功") {
           this.$message({
@@ -158,13 +173,20 @@ export default {
             console.log(Response);
             this.songListSongs = Response.data.data[0].songList;
           });
+        } else {
+          this.$message({
+            type: "error",
+            message: "添加到歌单失败"
+          });
         }
       });
     }
   },
   created() {
+    this.loading = true;
     API.bakGEtSongListInfo(this.$route.query.id).then(Response => {
       console.log(Response);
+      this.loading = false;
       this.songlistInfo = Response.data.data;
     });
     API.bakGetSongListSongs(this.$route.query.id).then(Response => {

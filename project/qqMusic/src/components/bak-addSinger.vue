@@ -1,6 +1,12 @@
 <template>
-  <div>
-    <div class="box">
+  <div
+    class="box"
+    v-loading="loading"
+    element-loading-text="拼命加载中"
+    element-loading-spinner="el-icon-loading"
+    element-loading-background="rgba(0, 0, 0, 0)"
+  >
+    <div>
       <el-form ref="form" :model="singerInfo" label-width="80px">
         <el-form-item label="歌手名字">
           <el-input v-model="singerInfo.singerName" placeholder="请输入歌手名字"></el-input>
@@ -63,11 +69,13 @@ export default {
         singerIntr: "",
         singerAge: "",
         singerAvatar: ""
-      }
+      },
+      loading: false
     };
   },
   methods: {
     addSinger() {
+      this.loading = true;
       var formData = new FormData();
       formData.append("singerName", this.singerInfo.singerName);
       formData.append("gender", this.singerInfo.singerGender);
@@ -75,6 +83,7 @@ export default {
       formData.append("age", this.singerInfo.singerAge);
       formData.append("file", this.singerInfo.singerAvatar);
       API.bakAddSinger(formData).then(Response => {
+        this.loading = false;
         console.log(Response);
         if (Response.data.code == 1) {
           this.$message({

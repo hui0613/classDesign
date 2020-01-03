@@ -1,5 +1,10 @@
 <template>
-  <div>
+  <div
+    v-loading="loading"
+    element-loading-text="拼命加载中"
+    element-loading-spinner="el-icon-loading"
+    element-loading-background="rgba(0, 0, 0, 0)"
+  >
     <!-- <div class="options">
       <el-button type="primary" @click="toAddSinger">添加歌手</el-button>
     </div>-->
@@ -47,7 +52,8 @@ import API from "../API";
 export default {
   data() {
     return {
-      singerList: []
+      singerList: [],
+      loading: false
     };
   },
   methods: {
@@ -65,11 +71,13 @@ export default {
     }
   },
   created() {
+    this.loading = true;
     console.log("getsinger");
     API.bakGetSinger({
       page: 1,
       size: 10
     }).then(Response => {
+      this.loading = false;
       console.log(Response);
       this.singerList = Response.data.data.list;
     });

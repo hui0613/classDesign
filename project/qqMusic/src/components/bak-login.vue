@@ -37,7 +37,7 @@ export default {
           if (Response.data.message == "登录成功") {
             console.log("登录成功");
             this.$router.push({
-              path: "/bak-home"
+              path: "/bak/home"
             });
           } else {
             this.loginResult = "账号或密码错误";

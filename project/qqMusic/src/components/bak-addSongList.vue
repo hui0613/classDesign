@@ -1,5 +1,10 @@
 <template>
-  <div>
+  <div
+    v-loading="loading"
+    element-loading-text="拼命加载中"
+    element-loading-spinner="el-icon-loading"
+    element-loading-background="rgba(0, 0, 0, 0)"
+  >
     <div class="addSongList-box">
       <el-form ref="form" :model="songListInfo" label-width="80px">
         <el-form-item label="歌单名称">
@@ -88,7 +93,8 @@ export default {
           name: "123"
         }
       ],
-      host: config.host
+      host: config.host,
+      loading: false
     };
   },
   methods: {
@@ -110,15 +116,22 @@ export default {
     },
     //创建歌单
     addSongList() {
+      this.loading = true;
       this.$refs.uploadSongListPicture.submit();
     },
     //歌单创建成功回调函数
     createSuccess(response, file, filelist) {
       console.log(response);
+      this.loading = false;
       if (response.message == "创建歌单成功") {
         this.$message({
           type: "success",
           message: "创建歌单成功"
+        });
+      } else {
+        this.$message({
+          type: "errot",
+          message: "创建歌单失败"
         });
       }
     }

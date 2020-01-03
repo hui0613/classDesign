@@ -37,8 +37,8 @@
         </el-col>
       </el-aside>
       <el-main class="main">
-        <div v-if="$route.path == '/bak-home'" class="welcome">欢迎使用空灵音乐管理后台</div>
-        <el-page-header v-if="$route.path != '/bak-home'" @back="back" :content="$route.name"></el-page-header>
+        <div v-if="$route.path == '/bak/home'" class="welcome">欢迎使用空灵音乐管理后台</div>
+        <el-page-header v-if="$route.path != '/bak/home'" @back="back" :content="$route.name"></el-page-header>
         <router-view></router-view>
       </el-main>
     </el-container>
@@ -56,7 +56,7 @@ export default {
       API.bakLogout().then(Response => {
         console.log(Response);
         if (Response.data.message == "请求成功！") {
-          this.$router.push("/bak-login");
+          this.$router.push("/bak/login");
         }
       });
     }

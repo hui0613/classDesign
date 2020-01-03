@@ -1,24 +1,31 @@
 <template>
-  <el-table :data="tableData" style="width: 100%">
-    <el-table-column label="类型名称" prop="name"></el-table-column>
+  <div
+    v-loading="loading"
+    element-loading-text="拼命加载中"
+    element-loading-spinner="el-icon-loading"
+    element-loading-background="rgba(0, 0, 0, 0)"
+  >
+    <el-table :data="tableData" style="width: 100%">
+      <el-table-column label="类型名称" prop="name"></el-table-column>
 
-    <el-table-column align="right">
-      <template slot="header">
-        <el-button type="primary" @click="addSongType">添加类型</el-button>
-      </template>
-    </el-table-column>
-    <el-table-column align="right">
-      <template slot="header" slot-scope="scope">
-        <el-input placeholder="请输入" v-model="seachName" class="input-with-select">
-          <el-button slot="append" icon="el-icon-search" @click="searchSongType"></el-button>
-        </el-input>
-      </template>
-      <template slot-scope="scope">
-        <!-- <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">Edit</el-button> -->
-        <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-      </template>
-    </el-table-column>
-  </el-table>
+      <el-table-column align="right">
+        <template slot="header">
+          <el-button type="primary" @click="addSongType">添加类型</el-button>
+        </template>
+      </el-table-column>
+      <el-table-column align="right">
+        <template slot="header" slot-scope="scope">
+          <el-input placeholder="请输入" v-model="seachName" class="input-with-select">
+            <el-button slot="append" icon="el-icon-search" @click="searchSongType"></el-button>
+          </el-input>
+        </template>
+        <template slot-scope="scope">
+          <!-- <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">Edit</el-button> -->
+          <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+  </div>
 </template>
 
 <script>
@@ -27,7 +34,8 @@ export default {
   data() {
     return {
       tableData: [],
-      seachName: ""
+      seachName: "",
+      loading: false
     };
   },
   methods: {
@@ -44,9 +52,11 @@ export default {
         cancelButtonText: "取消"
       })
         .then(({ value }) => {
+          this.loading = true;
           API.bakAddSongType({
             name: value
           }).then(Response => {
+            this.loading = false;
             console.log(Response);
             if (Response.data.message == "增加类型成功！") {
               this.tableData.push({
